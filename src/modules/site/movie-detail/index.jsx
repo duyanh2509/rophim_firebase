@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router';
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
-import { db } from '../../firebase/firebaseConfig';
-import { convertToYoutubeEmbedUrl } from '../../utilities/ConvertLinkYoutube';
+import { db } from '../../../firebase/firebaseConfig';
+import { convertToYoutubeEmbedUrl } from '../../../utilities/ConvertLinkYoutube';
 
 function MovieDetail() {
   const { id } = useParams();

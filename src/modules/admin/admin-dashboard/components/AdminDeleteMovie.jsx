@@ -1,5 +1,5 @@
 import { doc, deleteDoc } from 'firebase/firestore';
-import { db } from '../../firebase/firebaseConfig';
+import { db } from '../../../../firebase/firebaseConfig';
 
 function AdminDeleteMovie({ movieId, onDeleteSuccess, fetchMovies }) {
   const handleDelete = async () => {

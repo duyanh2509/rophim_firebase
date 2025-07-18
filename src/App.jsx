@@ -1,33 +1,39 @@
-import { Route, Routes } from 'react-router';
 import './App.css';
-import AdminDashBoard from './components/Admin/AdminDashBoard';
-import AdminListMovie from './components/Admin/AdminListMovie';
-import MovieDetail from './pages/movie-detail';
+import { Route, Routes } from 'react-router';
 import InputContainer from './components/user/InputContainer';
-import AdminUpdateMovie from './components/Admin/AdminUpdateMovies';
-import Login from './pages/login-page/Login';
-import SignUp from './pages/login-page/Sign-Up';
+import PrivateRouter from './components/common/PrivateRouter';
+import LoginPage from './pages/login-page';
+import RegisterPage from './pages/register-page';
+import AdminDashBoardPage from './pages/admin/admin-dashboard';
+import AdminUpdatePage from './pages/admin/admin-update';
+import MovieDetailPage from './pages/site/movie-detail';
 
 const App = () => {
   return (
-    <div className="bg-[#0F111A]">
+    <div className="bg-[#0F111A] min-h-screen">
       <Routes>
-        <Route path="admin">
-          <Route index element={<AdminDashBoard />} />
-          <Route path="movies" element={<AdminListMovie />} />
-          <Route path="movies/:id/update" element={<AdminUpdateMovie />} />
-        </Route>
-        <Route path="login" element={<Login />} />
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route path="movies/:id" element={<MovieDetail />} />
+        <Route
+          path="admin"
+          element={
+            <PrivateRouter>
+              <AdminDashBoardPage />
+            </PrivateRouter>
+          }
+        />
+        <Route
+          path="admin/movies/:id/update"
+          element={
+            <PrivateRouter>
+              <AdminUpdatePage />
+            </PrivateRouter>
+          }
+        />
+
+        <Route path="login" element={<LoginPage />} />
+        <Route path="/sign-up" element={<RegisterPage />} />
+        <Route path="movies/:id" element={<MovieDetailPage />} />
         <Route path="movies/input" element={<InputContainer />} />
       </Routes>
-      <br />
-      {/* <div>
-        <InputContainer />
-        <BannerMovies />
-        <MovieRegions />
-      </div> */}
     </div>
   );
 };

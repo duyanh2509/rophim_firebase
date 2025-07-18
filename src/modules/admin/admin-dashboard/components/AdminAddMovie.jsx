@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { addDoc, collection } from 'firebase/firestore';
-import { db } from '../../firebase/firebaseConfig';
+import { useState } from 'react';
+import { db } from '../../../../firebase/firebaseConfig';
 
 function AdminAddMovie({ addMovie }) {
   const [formData, setFormData] = useState({

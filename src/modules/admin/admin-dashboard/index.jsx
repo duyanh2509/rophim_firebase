@@ -1,6 +1,6 @@
-import AdminAddMovie from './AdminAddMovie';
-import AdminListMovie from './AdminListMovie';
-import { useFetchData } from '../../hooks/useFetchData';
+import { useFetchData } from '../../../hooks/useFetchData';
+import AdminAddMovie from './components/AdminAddMovie';
+import AdminListMovie from './components/AdminListMovie';
 
 function AdminDashBoard() {
   const { listMovies, setListMovies, fetchMovies } = useFetchData();
