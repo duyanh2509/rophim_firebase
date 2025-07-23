@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useFetchData } from '../../utilities/useFetchData';
 import { BannerMovieCard } from './BannerMovieCard';
 import BannerMovieGenres from './BannerMovieGenres';
+import { useFetchData } from '../../../../hooks/useFetchData';
 
 function BannerMovies() {
   const { listBanners } = useFetchData();

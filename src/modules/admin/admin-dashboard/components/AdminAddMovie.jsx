@@ -15,6 +15,7 @@ function AdminAddMovie({ addMovie }) {
     region: '',
     actor: '',
     type: '',
+    trailer: '',
   });
 
   const [error, setError] = useState('');
@@ -59,6 +60,7 @@ function AdminAddMovie({ addMovie }) {
             .map((t) => t.trim())
             .filter(Boolean)
         : [],
+      trailer: formData.trailer,
     };
 
     try {
@@ -79,6 +81,7 @@ function AdminAddMovie({ addMovie }) {
         time: '',
         region: '',
         actor: '',
+        trailer: '',
       });
       setError('');
       alert('Đã thêm phim!');
@@ -100,29 +103,14 @@ function AdminAddMovie({ addMovie }) {
         { name: 'slug', type: 'text', placeholder: 'Slug' },
         { name: 'age', type: 'text', placeholder: 'Allow Age' },
         { name: 'season', type: 'text', placeholder: 'Season' },
-        {
-          name: 'episode',
-          type: 'text',
-          placeholder: 'Episodes',
-        },
-        {
-          name: 'type',
-          type: 'text',
-          placeholder: 'Types',
-        },
+        { name: 'episode', type: 'text', placeholder: 'Episodes' },
+        { name: 'type', type: 'text', placeholder: 'Types' },
         { name: 'description', type: 'text', placeholder: 'Description' },
         { name: 'image', type: 'text', placeholder: 'Image URL' },
         { name: 'time', type: 'text', placeholder: 'Time' },
-        {
-          name: 'region',
-          type: 'text',
-          placeholder: 'Regions',
-        },
-        {
-          name: 'actor',
-          type: 'text',
-          placeholder: 'Actors',
-        },
+        { name: 'region', type: 'text', placeholder: 'Regions' },
+        { name: 'actor', type: 'text', placeholder: 'Actors' },
+        { name: 'trailer', type: 'text', placeholder: 'Trailer URL' },
       ].map((field) => (
         <input
           key={field.name}

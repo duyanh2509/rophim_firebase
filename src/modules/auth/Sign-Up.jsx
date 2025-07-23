@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { doCreateUserWithEmailAndPassword } from '../../firebase/auth';
-import { addDoc, collection } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../../firebase/firebaseConfig';
 
 const Register = () => {
@@ -10,6 +10,7 @@ const Register = () => {
   const [emailInput, setEmailInput] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setconfirmPassword] = useState('');
+  const [name, setName] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -24,7 +25,12 @@ const Register = () => {
 
       const { email, uid } = userCredential.user;
 
-      await addDoc(collection(db, 'accounts'), { email, uid, role: 'user' });
+      await setDoc(doc(db, 'accounts', uid), {
+        email,
+        uid,
+        name,
+        role: 'user',
+      });
 
       alert('Thành Công');
       navigate('/login');
@@ -47,11 +53,24 @@ const Register = () => {
               <label className="text-sm text-gray-600 font-bold">Email</label>
               <input
                 type="email"
-                autoComplete="email"
                 required
                 value={emailInput}
                 onChange={(e) => {
                   setEmailInput(e.target.value);
+                }}
+                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
+              />
+            </div>
+            <div>
+              <label className="text-sm text-gray-600 font-bold">
+                Username
+              </label>
+              <input
+                type="name"
+                required
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
                 }}
                 className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
               />
@@ -64,7 +83,6 @@ const Register = () => {
               <input
                 disabled={isRegistering}
                 type="password"
-                autoComplete="new-password"
                 required
                 value={password}
                 onChange={(e) => {
@@ -81,7 +99,6 @@ const Register = () => {
               <input
                 disabled={isRegistering}
                 type="password"
-                autoComplete="off"
                 required
                 value={confirmPassword}
                 onChange={(e) => {

@@ -1,13 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router';
-import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs, addDoc } from 'firebase/firestore';
 import { db } from '../../../firebase/firebaseConfig';
 import { convertToYoutubeEmbedUrl } from '../../../utilities/ConvertLinkYoutube';
+import { useAuth } from '../../../contexts/AuthContext';
+import InputContainer from '../home-page/components/InputContainer';
+import { useFetchData } from '../../../hooks/useFetchData';
+import { Comments } from '../home-page/components/comments';
 
 function MovieDetail() {
   const { id } = useParams();
   const location = useLocation();
   const loadingTitle = location.state?.title;
+  const { currentUser } = useAuth();
+  const { listComments, fetchComments } = useFetchData();
 
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,7 +21,12 @@ function MovieDetail() {
   const [showRecommendations, setShowRecommendations] = useState(false);
   const [actors, setActors] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
+  const [commentText, setCommentText] = useState('');
+  const [isAnonymous, setIsAnonymous] = useState(false);
 
+  useEffect(() => {
+    fetchComments(id);
+  }, []);
   useEffect(() => {
     async function fetchMovieDetail() {
       try {
@@ -71,9 +82,59 @@ function MovieDetail() {
   const formatArray = (value) =>
     Array.isArray(value) ? value.join(', ') : value || 'Không có';
 
+  const handleCommentSubmit = async () => {
+    // if (!currentUser) {
+    //   alert('Bạn cần đăng nhập để bình luận!');
+    //   return;
+    // }
+    // try {
+    //   await addDoc(collection(db, 'comments'), {
+    //     movieId: id,
+    //     movieTitle: movie.title,
+    //     userId: currentUser.uid,
+    //     userEmail: currentUser.email,
+    //     userName: isAnonymous ? 'Ẩn danh' : user.name || 'Ẩn danh',
+    //     text: commentText,
+    //   });
+    //   setCommentText('');
+    //   await fetchComments();
+    //   alert('Bình luận đã được gửi!');
+    // } catch (error) {
+    //   console.error('Lỗi khi gửi bình luận:', error);
+    //   alert('Gửi bình luận thất bại!');
+    // }
+
+    if (!currentUser) {
+      alert('Bạn cần đăng nhập để bình luận!');
+      return;
+    }
+    try {
+      await addDoc(collection(db, 'comments'), {
+        movieId: id,
+        movieTitle: movie.title,
+        userId: currentUser.uid,
+        userEmail: currentUser.email,
+        text: commentText,
+        isAnonymous: isAnonymous,
+      });
+      setCommentText('');
+      await fetchComments(id);
+
+      alert('Bình luận đã được gửi!');
+    } catch (error) {
+      console.error('Lỗi khi gửi bình luận:', error);
+      alert('Gửi bình luận thất bại!');
+    }
+  };
+
+  // const movieComments = listComments.filter(
+  //   (comment) => comment.movieId === id,
+  // );
+
   return (
     <div className="bg-[#121317] min-h-screen text-white cursor-pointer">
-      <div className="w-full h-[600px] mb-6">
+      <InputContainer />
+      <div className="w-full h-[600px] mb-6 mt-[70px]">
         {movie.trailer.includes('youtube.com') ||
         movie.trailer.includes('youtu.be') ? (
           <iframe
@@ -242,6 +303,46 @@ function MovieDetail() {
                 >
                   Đề xuất
                 </button>
+              </div>
+              <div className="bg-[#1c1e26] p-6 rounded-lg mt-4">
+                <h2 className="text-xl font-semibold mb-4">Bình luận</h2>
+
+                <div className="flex items-start gap-4 mb-6">
+                  <img className="w-10 h-10 rounded-full" />
+                  <div className="flex-1">
+                    <textarea
+                      placeholder="Viết bình luận"
+                      className="w-full h-20 p-3 bg-[#2a2c38] text-white rounded  outline-none"
+                      maxLength={1000}
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                    />
+
+                    <div className="flex items-center justify-between mt-2">
+                      <label className="text-sm text-gray-400 flex items-center gap-1">
+                        <input
+                          type="checkbox"
+                          className="accent-yellow-400"
+                          checked={isAnonymous}
+                          onChange={(e) => setIsAnonymous(e.target.checked)}
+                        />
+                        Ẩn Danh
+                      </label>
+
+                      <button
+                        onClick={handleCommentSubmit}
+                        className="bg-yellow-400 hover:bg-yellow-300 text-black font-medium px-4 py-2 rounded"
+                      >
+                        Gửi
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                {listComments.map((item, index) => (
+                  <Comments key={index} comment={item} />
+                ))}
               </div>
 
               {showActors && (

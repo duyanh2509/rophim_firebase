@@ -1,6 +1,17 @@
+import { useNavigate } from 'react-router';
+
 export function MovieRegionCard({ movie }) {
+  const navigate = useNavigate();
+  const handleNavigateToDetail = (id, title) => {
+    navigate(`/movies/${id}`, {
+      state: { title: title },
+    });
+  };
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div
+      onClick={() => handleNavigateToDetail(movie.id, movie.title)}
+      className="flex flex-col justify-center items-center cursor-pointer"
+    >
       <div className="max-w-[360px] max-h-[202px]">
         <img
           className="w-full h-full object-cover rounded-[10px]"

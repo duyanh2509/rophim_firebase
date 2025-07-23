@@ -1,16 +1,16 @@
-import { useFetchData } from '../../utilities/useFetchData';
+import { useFetchData } from '../../../../hooks/useFetchData';
 import { MovieRegionCard } from './MovieRegionCard';
 
 function MovieRegions() {
   const { listMovies } = useFetchData();
   const hanQuocMovies = listMovies.filter((movie) =>
-    movie.regions?.includes('han-quoc'),
+    movie.region?.includes('Hàn Quốc'),
   );
   const trungQuocMovies = listMovies.filter((movie) =>
-    movie.regions?.includes('trung-quoc'),
+    movie.region?.includes('Trung Quốc'),
   );
-  const usUkMovies = listMovies .filter((movie) =>
-    movie.regions?.includes('us-uk'),
+  const usUkMovies = listMovies.filter((movie) =>
+    movie.region?.includes('us-uk'),
   );
 
   return (
@@ -21,7 +21,7 @@ function MovieRegions() {
             className="text-[24px] font-bold !bg-clip-text text-transparent"
             style={{
               background: 'linear-gradient(235deg, white 30%, #674196 130%)',
-            }}  
+            }}
           >
             Phim Hàn Quốc
           </h2>
